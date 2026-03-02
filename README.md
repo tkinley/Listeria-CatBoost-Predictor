@@ -60,9 +60,10 @@ Capacity-based sampling enrichment using calibrated risk score:
 ## Reproducibility
 
 ### System requirements
-- CPU: 4+ cores recommended  
-- RAM: 8 GB minimum (16 GB recommended)  
+- Tested on: Intel i7 / AMD Ryzen 7 (8 cores), 16 GB RAM
+- Minimum: 4 cores, 8 GB RAM
 - Disk: < 200 MB for artifacts (dataset stored separately)
+- GPU: Not required (CPU-only)
 
 ### Environment
 Versions recorded in: `outputs_submission/versions.json`
