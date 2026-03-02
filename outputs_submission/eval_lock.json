@@ -1,0 +1,9 @@
+{
+  "dataset": "ListeriaSoil_clean.csv",
+  "target_definition": "y = 1 if isolates_obtained > 0 else 0",
+  "cv": "StratifiedGroupKFold",
+  "grid_size_deg": 0.25,
+  "n_splits": 5,
+  "seed": 42,
+  "threshold_policy": "max_f1_oof"
+}
