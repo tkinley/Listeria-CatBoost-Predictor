@@ -9,8 +9,7 @@ This repository contains an end-to-end benchmark pipeline to predict *Listeria* 
 
 ## Dataset and citation
 Cornell Food Safety ML Repository: “Listeria in soil”  
-Primary source publication:  
-Liao, J., Guo, X., Weller, D.L. et al. (2021) Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology* 6, 1021–1030.
+Primary source publication: Liao, J., Guo, X., Weller, D.L. et al. (2021) Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology* 6, 1021–1030.
 
 ## Task definition
 Outcome column: `Number of Listeria isolates obtained`  
