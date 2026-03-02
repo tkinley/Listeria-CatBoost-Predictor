@@ -1,7 +1,7 @@
 # Spatially Aware CatBoost Model for Predicting Listeria Presence in Soil
 
 **Team:** Decaying β-Amyloid  
-**Competition:** IAFP AI Benchmarking Student Competition on Predictive Food Safety Models  
+**Competition:** IAFP AI Benchmarking Student AI Benchmark Competition on Predictive Food Safety Models  
 **Track:** GIS-based pathogen presence prediction (Listeria in soil)
 
 ## Overview
@@ -9,38 +9,42 @@ This repository contains an end-to-end benchmark pipeline to predict *Listeria* 
 
 ## Dataset and citation
 Cornell Food Safety ML Repository: “Listeria in soil”  
-Primary source publication: Liao, J., Guo, X., Weller, D.L. et al. (2021) Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology* 6, 1021–1030.
+
+Please cite the primary source:
+- Liao, J., Guo, X., Weller, D. L., et al. (2021). Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology*, 6, 1021–1030. https://doi.org/10.1038/s41564-021-00935-7
 
 ## Task definition
 Outcome column: `Number of Listeria isolates obtained`  
+
 Binary label:
 - y = 1 if isolates > 0
 - y = 0 otherwise
 
 ## Locked evaluation protocol
 A locked spatial cross-validation protocol is used to reduce spatial leakage:
-- CV: StratifiedGroupKFold
-- Spatial grouping: 0.25° latitude/longitude grid cells
-- Folds: 5
-- Seed: 42
-- Threshold policy: maximize F1 on out-of-fold predictions
+- CV: StratifiedGroupKFold  
+- Spatial grouping: 0.25° latitude/longitude grid cells  
+- Folds: 5  
+- Seed: 42  
+- Threshold policy: maximize F1 on out-of-fold (OOF) predictions  
 
 Locked configuration: `outputs_submission/eval_lock.json`
 
 ## Final benchmark results (locked protocol)
 Source: `outputs_submission/overall_metrics.json`
 
-| Metric | Value |
+| Metric | Mean ± SD |
 |---|---:|
-| ROC AUC | 0.936 |
-| PR AUC | 0.932 |
-| F1 | 0.872 |
-| Sensitivity | 0.897 |
-| Specificity | 0.839 |
+| ROC AUC | 0.936 ± 0.022 |
+| PR AUC | 0.932 ± 0.027 |
+| F1 | 0.872 ± 0.035 |
+| Sensitivity | 0.897 ± 0.036 |
+| Specificity | 0.839 ± 0.040 |
 | Locked threshold (F1-optimized) | 0.475 |
 
 ## Calibration and actionability
 Isotonic calibration improved probability accuracy (Brier score 0.1008 → 0.0945).  
+
 Capacity-based sampling enrichment using calibrated risk score:
 - Top 10% highest risk: 98.4% observed positivity (vs 50.0% overall)
 - Top 20% highest risk: 96.8% observed positivity
@@ -56,16 +60,19 @@ Capacity-based sampling enrichment using calibrated risk score:
 ## Reproducibility
 
 ### System requirements
-- CPU: 4+ cores recommended
-- RAM: 8 GB minimum (16 GB recommended)
+- CPU: 4+ cores recommended  
+- RAM: 8 GB minimum (16 GB recommended)  
 - Disk: < 200 MB for artifacts (dataset stored separately)
 
 ### Environment
 Versions recorded in: `outputs_submission/versions.json`
 
 ### Run
-Open and run the notebook:
-- `final_1.ipynb`
+1. Place the dataset files in the repository root:
+   - `ListeriaSoil_clean.csv`
+   - `ListeriaSoil_Metadata.csv`
+2. Open and run the notebook:
+   - `final_1.ipynb`
 
 Outputs are written to:
 - `outputs_submission/`
