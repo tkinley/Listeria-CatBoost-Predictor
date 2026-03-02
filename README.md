@@ -5,44 +5,30 @@
 **Track:** GIS-based pathogen presence prediction (Listeria in soil)
 
 ## Overview
-This repository contains an end-to-end machine learning pipeline to predict the presence of *Listeria* spp. in U.S. soil samples using soil physicochemical properties, climate variables, land-use composition, and geographic coordinates.
-
-Key design choices:
-- Spatially aware cross-validation to reduce spatial leakage
-- CatBoostClassifier for tabular modeling
-- Probability calibration (isotonic regression) to produce an operational risk score
-- Threshold tuning using out-of-fold (OOF) predictions
+This repository contains an end-to-end benchmark pipeline to predict *Listeria* spp. presence in U.S. soil samples using soil chemistry, climate, land use, and geographic coordinates. The workflow emphasizes spatially aware validation, threshold tuning, and probability calibration for operational decision-making.
 
 ## Dataset and citation
-Dataset: "Listeria in soil" from the Cornell Food Safety ML Repository.
-
-Primary source publication:
-- Liao, J., Guo, X., Weller, D.L. et al. (2021) Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology* 6, 1021–1030. https://doi.org/10.1038/s41564-021-00935-7
-
-Files expected locally (not committed to this repo):
-- `ListeriaSoil_clean.csv`
-- `ListeriaSoil_Metadata.csv`
+Cornell Food Safety ML Repository: “Listeria in soil”  
+Primary source publication: Liao, J., Guo, X., Weller, D.L. et al. (2021) Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology* 6, 1021–1030.
 
 ## Task definition
 Outcome column: `Number of Listeria isolates obtained`  
 Binary label:
-- y = 1 if isolates obtained > 0
+- y = 1 if isolates > 0
 - y = 0 otherwise
 
-## Locked evaluation protocol (submission benchmark)
-To reduce overly optimistic evaluation due to spatial autocorrelation, we perform group-based spatial CV:
+## Locked evaluation protocol
+A locked spatial cross-validation protocol is used to reduce spatial leakage:
 - CV: StratifiedGroupKFold
-- Spatial grouping: latitude/longitude grid cells (0.25°)
+- Spatial grouping: 0.25° latitude/longitude grid cells
 - Folds: 5
 - Seed: 42
-- Threshold policy: maximize F1 on OOF predictions
+- Threshold policy: maximize F1 on out-of-fold predictions
 
-The locked configuration is recorded in:
-- `outputs_submission/eval_lock.json`
+Locked configuration: `outputs_submission/eval_lock.json`
 
 ## Final benchmark results (locked protocol)
-Metrics are computed from OOF predictions under the locked protocol and saved in:
-- `outputs_submission/overall_metrics.json`
+Source: `outputs_submission/overall_metrics.json`
 
 | Metric | Value |
 |---|---:|
@@ -53,10 +39,8 @@ Metrics are computed from OOF predictions under the locked protocol and saved in
 | Specificity | 0.839 |
 | Locked threshold (F1-optimized) | 0.475 |
 
-## Calibration and decision policy
-We calibrate OOF probabilities using isotonic regression to produce a risk score suitable for screening and prioritization.
-- Brier score improved: 0.1008 → 0.0945
-
+## Calibration and actionability
+Isotonic calibration improved probability accuracy (Brier score 0.1008 → 0.0945).  
 Capacity-based sampling enrichment using calibrated risk score:
 - Top 10% highest risk: 98.4% observed positivity (vs 50.0% overall)
 - Top 20% highest risk: 96.8% observed positivity
@@ -66,21 +50,22 @@ Capacity-based sampling enrichment using calibrated risk score:
 **Figure 1.** Top 10 feature importances  
 ![Figure 1](outputs_submission/fig_1_feature_importance.png)
 
-**Figure 2.** ROC, PR, confusion matrix at locked threshold, and calibration curve  
+**Figure 2.** ROC, PR, confusion matrix (locked threshold), and calibration curve  
 ![Figure 2](outputs_submission/fig_2_panel_roc_pr_cm_calibration.png)
 
 ## Reproducibility
 
 ### System requirements
-- OS: Windows, Linux, macOS
 - CPU: 4+ cores recommended
 - RAM: 8 GB minimum (16 GB recommended)
-- Disk: < 200 MB (data + outputs)
+- Disk: < 200 MB for artifacts (dataset stored separately)
 
 ### Environment
-Exact versions used during development are recorded in:
-- `outputs_submission/versions.json`
+Versions recorded in: `outputs_submission/versions.json`
 
-Suggested install (adjust if your platform requires different pins):
-```bash
-pip install pandas numpy scikit-learn catboost matplotlib seaborn
+### Run
+Open and run the notebook:
+- `final_1.ipynb`
+
+Outputs are written to:
+- `outputs_submission/`
