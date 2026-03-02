@@ -30,6 +30,10 @@ A locked spatial cross-validation protocol is used to reduce spatial leakage:
 
 Locked configuration: `outputs_submission/eval_lock.json`
 
+## Development notes (brief)
+During development, we benchmarked alternative models (LightGBM) and simple ensembling, and performed spatial grid sensitivity checks (0.25°, 0.5°, 1.0°). The final submission result reported below is based strictly on the locked protocol in `outputs_submission/eval_lock.json`. Full experimental logs are provided in `EXPERIMENTS.md`.
+
+
 ## Final benchmark results (locked protocol)
 Source: `outputs_submission/overall_metrics.json`
 
