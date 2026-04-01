@@ -88,6 +88,38 @@ Notes:
 
 ---
 
+## G. Logistic Regression baseline under locked spatial protocol
+Evaluation:
+- StratifiedGroupKFold, 5 folds (same as locked submission protocol)
+- Spatial groups: 0.25° grid cells (210 groups)
+- Preprocessing: StandardScaler (fit on train fold, transform on validation fold)
+- Model: sklearn LogisticRegression (solver=lbfgs, C=1.0, L2 penalty, max_iter=2000, random_state=42)
+
+Pooled OOF metrics:
+
+| Model | ROC AUC | PR AUC | F1 (t=0.475) | Sensitivity (t=0.475) | Specificity (t=0.475) | Brier Score | F1 (opt thresh) | Opt Threshold |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Logistic Regression | 0.8029 | 0.7473 | 0.7530 | 0.8039 | 0.6688 | 0.1820 | 0.7782 | 0.340 |
+| CatBoost (locked) | 0.9362 | 0.9324 | 0.8719 | 0.8971 | 0.8392 | 0.1008 | 0.8719 | 0.475 |
+
+Fold-wise mean ± SD (Logistic Regression, threshold=0.475):
+
+| Metric | Mean ± SD |
+|---|---:|
+| ROC AUC | 0.8108 ± 0.0557 |
+| PR AUC | 0.7801 ± 0.0959 |
+| F1 | 0.7530 ± 0.0246 |
+| Sensitivity | 0.8047 ± 0.0541 |
+| Specificity | 0.6691 ± 0.0605 |
+
+Notes:
+- This experiment was added to confirm that CatBoost's model complexity is justified.
+- CatBoost outperforms logistic regression by 13 AUC points, 12 F1 points, and nearly halves the Brier score under the same spatial protocol.
+- The gap persists even when logistic regression uses its own F1-optimized threshold (0.340), reaching only 0.778 F1 versus CatBoost's 0.872.
+- The large margin indicates that nonlinear feature interactions captured by gradient-boosted trees provide substantial predictive value beyond what a linear model extracts from the same features.
+
+---
+
 ## F. Calibration and decision policy experiments (OOF-based)
 Calibration method:
 - Isotonic regression fit on OOF probabilities (no training leakage)
@@ -114,5 +146,6 @@ Notes:
   - Spatial GroupKFold with grid sensitivity
   - LightGBM comparisons and probability averaging ensemble
   - Calibration and top-k policy analysis
+- Logistic Regression baseline: run via `lr_baseline.py` under the locked StratifiedGroupKFold protocol.
 
 For clean review, treat `README.md` and `outputs_submission/overall_metrics.json` as the authoritative locked benchmark for submission.
