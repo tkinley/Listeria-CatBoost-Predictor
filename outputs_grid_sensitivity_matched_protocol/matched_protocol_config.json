@@ -1,0 +1,27 @@
+{
+  "cv": "StratifiedGroupKFold",
+  "n_splits": 5,
+  "shuffle": true,
+  "random_state": 42,
+  "fixed_threshold": 0.475,
+  "grid_sizes_tested": [
+    0.25,
+    0.5,
+    1.0
+  ],
+  "cat_params": {
+    "loss_function": "Logloss",
+    "eval_metric": "AUC",
+    "iterations": 20000,
+    "learning_rate": 0.03,
+    "depth": 8,
+    "l2_leaf_reg": 3.0,
+    "random_seed": 42,
+    "allow_writing_files": false,
+    "verbose": 0,
+    "od_type": "Iter",
+    "od_wait": 300
+  },
+  "dataset": "ListeriaSoil_clean.csv",
+  "note": "All three grid sizes evaluated under identical protocol. Only the spatial grouping changes. Exploratory results (GroupKFold, per-run thresholds) are NOT mixed here."
+}
