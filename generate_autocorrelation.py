@@ -6,7 +6,7 @@ Generates a two-panel spatial autocorrelation figure for the Listeria soil datas
 Panel 1: Geographic scatter of sampling sites colored by Max Temperature (C),
          demonstrating that nearby sites share similar environmental conditions.
 Panel 2: Pairwise geographic distance vs. absolute temperature difference,
-         illustrating Tobler's First Law — near things are more related.
+         illustrating Tobler's First Law (near things are more related).
 
 This figure motivates the spatial cross-validation strategy used in the project.
 """
@@ -32,7 +32,7 @@ df = pd.read_csv("ListeriaSoil_clean.csv")
 lat = df["Latitude"].values
 lon = df["Longitude"].values
 
-# Use Max Temperature — clear spatial gradient, matches reference figure
+# Use Max Temperature: clear spatial gradient, matches reference figure
 temp_col = [c for c in df.columns if "Max temperature" in c][0]
 temp = df[temp_col].values
 

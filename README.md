@@ -1,7 +1,7 @@
 # Spatially Aware CatBoost Model for Predicting *Listeria* Presence in Soil
 
 **Team:** Decaying β-Amyloid  
-**Competition:** IAFP AI Benchmarking — Student AI Benchmark Competition on Predictive Food Safety Models  
+**Competition:** IAFP AI Benchmarking: Student AI Benchmark Competition on Predictive Food Safety Models  
 **Track:** GIS-based pathogen presence prediction (*Listeria* in soil)  
 **License:** MIT
 
@@ -17,9 +17,9 @@ The primary model is a **CatBoost** gradient-boosted decision tree, evaluated un
 
 ## Motivation and Background
 
-Environmental *Listeria* surveillance across the U.S. generates high-dimensional geospatial data. Because soil properties and climate variables are spatially autocorrelated — nearby locations tend to have similar measurements — standard random train/test splits can overstate predictive performance by allowing the model to train on geographic neighbours of test points (spatial leakage).
+Environmental *Listeria* surveillance across the U.S. generates high-dimensional geospatial data. Because soil properties and climate variables are spatially autocorrelated (nearby locations tend to have similar measurements), standard random train/test splits can overstate predictive performance by allowing the model to train on geographic neighbours of test points (spatial leakage).
 
-**Figure — Spatial Autocorrelation in the Dataset**
+**Figure: Spatial Autocorrelation in the Dataset**
 
 ![Spatial Autocorrelation](fig_spatial_autocorrelation.png)
 
@@ -90,7 +90,7 @@ Listeria-CatBoost-Predictor/
 
 Class balance is approximately 50/50.
 
-**Source:** Cornell Food Safety ML Repository — "Listeria in soil."  
+**Source:** Cornell Food Safety ML Repository, "Listeria in soil."  
 Primary citation: Liao, J., Guo, X., Weller, D. L., et al. (2021). Nationwide genomic atlas of soil-dwelling *Listeria* reveals effects of selection and population ecology on pangenome evolution. *Nature Microbiology*, 6, 1021–1030. [https://doi.org/10.1038/s41564-021-00935-7](https://doi.org/10.1038/s41564-021-00935-7)
 
 ---
@@ -138,7 +138,7 @@ The logistic regression baseline is not intended as a competing model. Its purpo
 | ROC AUC | 0.803 | 0.936 | +13 pts |
 | PR AUC | 0.747 | 0.932 | +19 pts |
 | F1 (t = 0.475) | 0.753 | 0.872 | +12 pts |
-| Brier Score | 0.182 | 0.101 | −45% |
+| Brier Score | 0.182 | 0.101 | -45% |
 | F1 (opt. threshold) | 0.778 | 0.872 | +9 pts |
 
 The large, consistent gap across all metrics confirms that nonlinear feature interactions captured by gradient boosting provide substantial predictive value beyond what a linear model can extract from the same features.
@@ -186,17 +186,17 @@ Capacity-based sampling enrichment using calibrated risk scores:
 
 ## Figures
 
-### Figure 1 — Feature Importances (Top 10)
+### Figure 1: Feature Importances (Top 10)
 
 ![Feature Importance](outputs_submission/fig_1_feature_importance.png)
 
 Sodium concentration is the dominant predictor, followed by Molybdenum, Moisture, and Copper. Geographic coordinates (Latitude, Longitude) also contribute, consistent with spatial structuring of *Listeria* prevalence.
 
-### Figure 2 — ROC, PR, Confusion Matrix, and Calibration
+### Figure 2: ROC, PR, Confusion Matrix, and Calibration
 
 ![Panel Figure](outputs_submission/fig_2_panel_roc_pr_cm_calibration.png)
 
-### Figure 3 — Spatial Autocorrelation
+### Figure 3: Spatial Autocorrelation
 
 ![Spatial Autocorrelation](fig_spatial_autocorrelation.png)
 
