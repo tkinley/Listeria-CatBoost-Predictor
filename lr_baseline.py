@@ -16,7 +16,7 @@ import math
 import json
 
 # === Load data ===
-df = pd.read_csv("/home/user/workspace/ListeriaSoil_clean.csv")
+df = pd.read_csv("ListeriaSoil_clean.csv")
 target_col = "Number of Listeria isolates obtained"
 y = (df[target_col] > 0).astype(int).values
 X = df.drop(columns=[target_col])
