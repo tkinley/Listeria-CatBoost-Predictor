@@ -200,7 +200,7 @@ Sodium concentration is the dominant predictor, followed by Molybdenum, Moisture
 
 ![Spatial Autocorrelation](fig_spatial_autocorrelation.png)
 
-*Panel A maps sampling locations colored by maximum temperature, showing clear geographic clustering of environmental conditions. Panel B quantifies this pattern: as geographic distance between sample pairs increases, their temperature difference also increases on average (red trend line). This spatial autocorrelation justifies the use of spatial cross-validation over standard random splits.*
+*Because environmental variables are spatially autocorrelated (Panel A, Panel B), a random train/test split lets the model train on geographic neighbours of held-out points, inflating performance. Grouping samples into 0.25° grid cells and holding out entire cells (spatial CV) eliminates this leakage. In this project the drop from random CV (F1 = 0.901) to spatial CV (F1 = 0.872) confirms that the effect is real, and the grid-based protocol produces more honest generalization estimates.*
 
 ---
 
