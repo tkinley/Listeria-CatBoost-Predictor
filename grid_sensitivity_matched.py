@@ -45,7 +45,7 @@ GRID_SIZES      = [0.25, 0.50, 1.00]
 N_SPLITS        = LOCKED["n_splits"]      # 5
 SEED            = LOCKED["seed"]          # 42
 
-# Exact hyperparameters from notebook Cell 15 — do not change
+# Exact hyperparameters from notebook Cell 15: do not change
 CAT_PARAMS = dict(
     loss_function      = "Logloss",
     eval_metric        = "AUC",
@@ -125,7 +125,7 @@ for grid_deg in GRID_SIZES:
     n_groups = len(set(groups))
     print(f"  Number of spatial groups: {n_groups}")
 
-    # CV splits — identical protocol for every grid size
+    # CV splits: identical protocol for every grid size
     cv = StratifiedGroupKFold(n_splits=N_SPLITS, shuffle=True, random_state=SEED)
     splits = list(cv.split(X, y, groups))
 

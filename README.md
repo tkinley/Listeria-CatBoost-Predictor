@@ -11,15 +11,13 @@
 
 This repository implements a binary classification pipeline to predict whether *Listeria* spp. are present in U.S. soil samples. The model uses soil chemistry, climate, land-use, and geographic features to output a per-sample risk probability, enabling public health agencies and food safety programs to prioritize environmental sampling locations.
 
-The primary model is a **CatBoost** gradient-boosted decision tree, evaluated under a **spatially aware cross-validation protocol** that mitigates geographic data leakage. A **logistic regression baseline** (`lr_baseline.py`) is included to confirm that model complexity is warranted. See [Figure 3](#figure-3-spatial-autocorrelation) for a visual explanation of the leakage problem and the grid-based solution.
+The primary model is a **CatBoost** gradient-boosted decision tree, evaluated under a **spatially aware cross-validation protocol** that mitigates geographic data leakage. A **logistic regression baseline** (`lr_baseline.py`) is included to confirm that model complexity is warranted.
 
 ---
 
-## Motivation and Background
+## Motivation
 
-Environmental *Listeria* surveillance across the U.S. generates high-dimensional geospatial data. Because soil properties and climate variables are spatially autocorrelated (nearby locations tend to have similar measurements), standard random train/test splits can overstate predictive performance by allowing the model to train on geographic neighbours of test points (spatial leakage).
-
-This project addresses that challenge by grouping samples into 0.25 degree latitude/longitude grid cells and applying `StratifiedGroupKFold`, ensuring that no grid cell appears in both the training and validation sets within the same fold.
+Environmental *Listeria* surveillance across the U.S. generates high-dimensional geospatial data. Because soil properties and climate variables are spatially autocorrelated (nearby locations tend to have similar measurements), standard random train/test splits can overstate predictive performance by allowing the model to train on geographic neighbours of test points. This project addresses that challenge by grouping samples into 0.25-degree latitude/longitude grid cells and applying `StratifiedGroupKFold`, ensuring that no grid cell appears in both the training and validation sets within the same fold. See [Figure 3](#figure-3-spatial-autocorrelation) for a visual explanation.
 
 ---
 
@@ -97,7 +95,7 @@ All primary results use a locked configuration stored in `outputs_submission/eva
 | Parameter | Value |
 |---|---|
 | Cross-validation | `StratifiedGroupKFold` |
-| Spatial grid | 0.25 degree lat/lon cells (~210 groups) |
+| Spatial grid | 0.25-degree lat/lon cells (~210 groups) |
 | Folds | 5 |
 | Seed | 42 |
 | Threshold policy | Maximize F1 on pooled out-of-fold (OOF) predictions |
@@ -257,21 +255,21 @@ CatBoost must also be installed (`pip install catboost`).
 | `outputs_submission/fig_1_feature_importance.png` | Top-10 feature importance chart |
 | `outputs_submission/fig_2_panel_roc_pr_cm_calibration.png` | ROC, PR, confusion matrix, calibration |
 | `outputs_grid_sensitivity_matched_protocol/` | Grid sensitivity results and chart |
-| `fig_spatial_autocorrelation.png` | Spatial autocorrelation and spatial leakage figure (three panels) |
+| `fig_spatial_autocorrelation.png` | Spatial autocorrelation and leakage figure (three panels) |
 
 ---
 
 ## Limitations and Anticipated Questions
 
-1. **No external validation.** All reported metrics come from internal spatial cross-validation on a single dataset. Judges may ask why the team did not hold out an entire geographic region (for example, leave-one-state-out) or use a temporally separated test set. Internal spatial CV reduces but does not eliminate optimism, and true out-of-sample performance may differ.
+1. **No external validation.** All reported metrics come from internal spatial cross-validation on a single dataset. Judges may ask why the team did not hold out an entire geographic region (for example, leave-one-state-out) or use a temporally separated test set. Internal spatial cross-validation reduces but does not eliminate optimism, and true out-of-sample performance may differ.
 
-2. **Grid cell size justification.** The 0.25-degree grid is a reasonable default, but somewhat arbitrary. Judges may press for ecological or autocorrelation-range justification, such as a variogram or spatial correlogram analysis, to support this particular resolution. The grid sensitivity experiment (0.25, 0.50, 1.00 degrees) shows stable performance across resolutions, which partially addresses this concern but does not replace a principled spatial analysis.
+2. **Grid cell size justification.** "Why 0.25 degrees?" is a likely question. The choice is reasonable but somewhat arbitrary, and judges may press for ecological or autocorrelation-range justification, such as a variogram or spatial correlogram analysis. The grid sensitivity experiment (0.25, 0.50, 1.00 degrees) shows stable performance across resolutions, which partially addresses this concern but does not replace a principled spatial analysis.
 
-3. **Limited model diversity beyond boosted trees.** The competition starter already showed boosted-tree methods as strong performers. Judges may ask why no spatial model (such as kriging or spatial random effects) was tested to bracket performance or to assess whether spatial structure is being captured explicitly rather than implicitly through coordinate features. The logistic regression baseline (`lr_baseline.py`) addresses the simpler end of this spectrum, but the spatial-model end remains unexplored.
+3. **Limited model diversity beyond boosted trees.** The starter already showed boosted-tree methods as strong performers. Judges may ask why no linear baseline (such as logistic regression under spatial cross-validation) or spatial model (such as kriging or spatial random effects) was tested to bracket performance or assess whether a simpler model suffices. The logistic regression baseline (`lr_baseline.py`) addresses the simpler end of this spectrum, but the spatial-model end remains unexplored.
 
-4. **Feature importance interpretation.** Citing sodium and molybdenum as top predictors may invite questions about confounding: these features could partly proxy for geography itself. Judges may ask what happens to performance or importance rankings when coordinate features are removed, or whether partial-dependence or SHAP analyses have been performed to disentangle spatial confounding from genuine predictive signal.
+4. **Feature importance interpretation.** Citing sodium and molybdenum as top predictors may invite questions about confounding and whether these features partly proxy for geography itself. Judges may ask what happens to performance or importance rankings when coordinates are removed, or whether partial-dependence or SHAP analyses have been performed to disentangle spatial confounding from genuine predictive signal.
 
-5. **Threshold selection on OOF data.** The F1-optimized threshold (0.475) was selected on the same pooled out-of-fold predictions used to estimate performance. While this is better than selecting on training data, judges may ask whether this introduces subtle adaptive overfitting and how sensitive F1 is to small threshold perturbations. A nested approach (inner loop for threshold, outer loop for evaluation) would be more rigorous.
+5. **Threshold selection on OOF data.** While better than selecting on training data, the threshold was optimized on the same out-of-fold data used to estimate performance. Judges may ask whether this introduces subtle adaptive overfitting and how sensitive F1 is to small threshold perturbations. A nested approach (inner loop for threshold, outer loop for evaluation) would be more rigorous.
 
 ---
 
