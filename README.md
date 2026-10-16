@@ -55,7 +55,7 @@ Listeria-CatBoost-Predictor/
 +-- fig_spatial_autocorrelation.png        # Spatial autocorrelation and leakage figure
 +-- generate_autocorrelation.py            # Script to produce the autocorrelation figure
 |
-+-- AI benchmarking_Listeria_Deacying beta-amyloid.pdf  # Report / presentation
++-- IAFP_AI_Benchmark_Listeria_report.pdf  # Competition report / presentation
 +-- EXPERIMENTS.md                         # Full experimental log
 +-- LICENSE                                # MIT License
 +-- README.md                              # This file
